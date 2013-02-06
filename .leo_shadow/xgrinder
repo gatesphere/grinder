@@ -7,17 +7,18 @@
 
 #--unknown-language--@<< imports >>
 #--unknown-language--@+node:peckj.20130206111755.1377:<< imports >>
-import re
+import sys
 import os.path
 import pickle
-import sys
-import traceback
 
 grinder_gold = 0
 grinder_unlocked_libs = []
 grinder_errors = ''
 grinder_stats_file = '.stats.grinder'
 source = ''
+
+grinder_version = '20130206'
+
 #--unknown-language--@-node:peckj.20130206111755.1377:<< imports >>
 #--unknown-language--@nl
 #--unknown-language--@+others
@@ -39,7 +40,6 @@ def write_grinder_stats():
   pickle.dump((grinder_gold, grinder_unlocked_libs), f)
   f.close()
 
-
 #--unknown-language--@-node:peckj.20130206111755.1384:write_grinder_stats()
 #--unknown-language--@+node:peckj.20130206111755.1385:print_grinder_stats()
 def print_grinder_stats():
@@ -54,9 +54,50 @@ def print_grinder_stats():
 #--unknown-language--@-node:peckj.20130206111755.1390:grinder shop
 #--unknown-language--@+node:peckj.20130206111755.1383:run_grinder_shop()
 def run_grinder_shop():
-  pass
+  print_grinder_shop_heading()
+  loop = True
+  while(loop):
+    loop = do_grinder_shopping()
+  print_grinder_shop_farewell()
 
 #--unknown-language--@-node:peckj.20130206111755.1383:run_grinder_shop()
+#--unknown-language--@+node:peckj.20130206111755.1391:print_grinder_shop_heading()
+def print_grinder_shop_heading():
+  print "Welcome to the Grinder shop!"
+
+#--unknown-language--@-node:peckj.20130206111755.1391:print_grinder_shop_heading()
+#--unknown-language--@+node:peckj.20130206111755.1393:do_grinder_shopping()
+def do_grinder_shopping():
+  global grinder_gold, grinder_unlocked_libs
+  print_grinder_stats()
+  if grinder_gold < 500:
+    print "You can't afford anything at the moment... come back when you have at least 500 Gold!"
+    return False
+  print "Commands that can be entered below:"
+  print "  b modulename"
+  print "    -> unlocks modulename -- costs 500 gold"
+  print "  q"
+  print "    -> quits shopping"
+  cmd = raw_input("command?> ").strip()
+  if cmd == "q":
+    return False
+  elif cmd.startswith("b ") and len(cmd) > 2:
+    moduletounlock = cmd[2:]
+    confirm = raw_input("purchase module %s? (y/n)> " % moduletounlock).strip()
+    if confirm == 'y':
+      grinder_unlocked_libs.append(moduletounlock)
+      grinder_gold -= 500
+      print "purchased module %s" % moduletounlock
+  return True
+
+#--unknown-language--@-node:peckj.20130206111755.1393:do_grinder_shopping()
+#--unknown-language--@+node:peckj.20130206111755.1392:print_grinder_shop_farewell()
+def print_grinder_shop_farewell():
+  print "Bye!"
+
+#--unknown-language--@-node:peckj.20130206111755.1392:print_grinder_shop_farewell()
+#--unknown-language--@+node:peckj.20130206111755.1394:grinder run
+#--unknown-language--@-node:peckj.20130206111755.1394:grinder run
 #--unknown-language--@+node:peckj.20130206111755.1389:get_program_imports()
 def get_program_imports(line):
   imports = []
@@ -99,7 +140,6 @@ def check_grinder_program(prog):
             valid = False
             grinder_errors += "Error! Module %s not unlocked!\n" % imp
       source = source + line
-  
   return valid
 
 #--unknown-language--@-node:peckj.20130206111755.1380:check_grinder_program()
@@ -123,17 +163,54 @@ def print_grinder_errors():
   print grinder_errors
 
 #--unknown-language--@-node:peckj.20130206111755.1382:print_grinder_errors()
+#--unknown-language--@+node:peckj.20130206111755.1395:grinder help
+#--unknown-language--@-node:peckj.20130206111755.1395:grinder help
+#--unknown-language--@+node:peckj.20130206111755.1396:print_grinder_help()
+def print_grinder_help():
+  print '''
+Grinder is used as follows
+  ./grinder myprogram.py
+    -> runs myprogram.py if all the imports are unlocked
+  ./grinder stats
+    -> prints your Gold and unlocked imports
+  ./grinder shop
+    -> opens up the shop to spend your Gold on unlocking imports
+  ./grinder cheat
+    -> allows you to cheat - gives you 1000 Gold
+  ./grinder help
+    -> prints this help info
+  ./grinder about
+    -> prints some version and author info
+'''
+
+#--unknown-language--@-node:peckj.20130206111755.1396:print_grinder_help()
+#--unknown-language--@+node:peckj.20130206111755.1397:print_grinder_about()
+def print_grinder_about():
+  global grinder_version
+  print "Grinder, version %s" % grinder_version
+  print "Jacob Peck"
+  print "https://github.com/gatesphere/grinder"
+
+#--unknown-language--@-node:peckj.20130206111755.1397:print_grinder_about()
 #--unknown-language--@+node:peckj.20130206111755.1378:__main__
 if __name__ == "__main__":
   read_grinder_stats()
+  if len(sys.argv) != 2:
+    print_grinder_help()
+    sys.exit()
   arg = sys.argv[1]
   if arg == "shop":
     run_grinder_shop()
+    write_grinder_stats()
   elif arg == "stats":
     print_grinder_stats()
   elif arg == "cheat":
     grinder_gold += 1000;
     write_grinder_stats()
+  elif arg == "help":
+    print_grinder_help()
+  elif arg == "about":
+    print_grinder_about()
   else:
     if check_grinder_program(arg):
       run_grinder_program()

@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 
-import re
+import sys
 import os.path
 import pickle
-import sys
-import traceback
 
 grinder_gold = 0
 grinder_unlocked_libs = []
 grinder_errors = ''
 grinder_stats_file = '.stats.grinder'
 source = ''
+
+grinder_version = '20130206'
+
 def read_grinder_stats():
   global grinder_gold, grinder_unlocked_libs
   if os.path.exists(grinder_stats_file):
@@ -24,7 +25,6 @@ def write_grinder_stats():
   pickle.dump((grinder_gold, grinder_unlocked_libs), f)
   f.close()
 
-
 def print_grinder_stats():
   print "Your grinder stats:"
   print "Gold: %d" % grinder_gold
@@ -33,7 +33,40 @@ def print_grinder_stats():
     print "  %s" % lib
 
 def run_grinder_shop():
-  pass
+  print_grinder_shop_heading()
+  loop = True
+  while(loop):
+    loop = do_grinder_shopping()
+  print_grinder_shop_farewell()
+
+def print_grinder_shop_heading():
+  print "Welcome to the Grinder shop!"
+
+def do_grinder_shopping():
+  global grinder_gold, grinder_unlocked_libs
+  print_grinder_stats()
+  if grinder_gold < 500:
+    print "You can't afford anything at the moment... come back when you have at least 500 Gold!"
+    return False
+  print "Commands that can be entered below:"
+  print "  b modulename"
+  print "    -> unlocks modulename -- costs 500 gold"
+  print "  q"
+  print "    -> quits shopping"
+  cmd = raw_input("command?> ").strip()
+  if cmd == "q":
+    return False
+  elif cmd.startswith("b ") and len(cmd) > 2:
+    moduletounlock = cmd[2:]
+    confirm = raw_input("purchase module %s? (y/n)> " % moduletounlock).strip()
+    if confirm == 'y':
+      grinder_unlocked_libs.append(moduletounlock)
+      grinder_gold -= 500
+      print "purchased module %s" % moduletounlock
+  return True
+
+def print_grinder_shop_farewell():
+  print "Bye!"
 
 def get_program_imports(line):
   imports = []
@@ -74,7 +107,6 @@ def check_grinder_program(prog):
             valid = False
             grinder_errors += "Error! Module %s not unlocked!\n" % imp
       source = source + line
-  
   return valid
 
 def run_grinder_program():
@@ -93,16 +125,47 @@ def print_grinder_errors():
   global grinder_errors
   print grinder_errors
 
+def print_grinder_help():
+  print '''
+Grinder is used as follows
+  ./grinder myprogram.py
+    -> runs myprogram.py if all the imports are unlocked
+  ./grinder stats
+    -> prints your Gold and unlocked imports
+  ./grinder shop
+    -> opens up the shop to spend your Gold on unlocking imports
+  ./grinder cheat
+    -> allows you to cheat - gives you 1000 Gold
+  ./grinder help
+    -> prints this help info
+  ./grinder about
+    -> prints some version and author info
+'''
+
+def print_grinder_about():
+  global grinder_version
+  print "Grinder, version %s" % grinder_version
+  print "Jacob Peck"
+  print "https://github.com/gatesphere/grinder"
+
 if __name__ == "__main__":
   read_grinder_stats()
+  if len(sys.argv) != 2:
+    print_grinder_help()
+    sys.exit()
   arg = sys.argv[1]
   if arg == "shop":
     run_grinder_shop()
+    write_grinder_stats()
   elif arg == "stats":
     print_grinder_stats()
   elif arg == "cheat":
     grinder_gold += 1000;
     write_grinder_stats()
+  elif arg == "help":
+    print_grinder_help()
+  elif arg == "about":
+    print_grinder_about()
   else:
     if check_grinder_program(arg):
       run_grinder_program()
