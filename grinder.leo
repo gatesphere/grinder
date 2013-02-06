@@ -10,7 +10,8 @@
 <preferences/>
 <find_panel_settings/>
 <vnodes>
-<v t="peckj.20130206111755.1371" a="E"><vh>@shadow grinder</vh></v>
+<v t="peckj.20130206111755.1371" a="E"
+expanded="peckj.20130206111755.1386,"><vh>@shadow grinder</vh></v>
 </vnodes>
 <tnodes>
 </tnodes>

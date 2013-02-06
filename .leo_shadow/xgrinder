@@ -8,26 +8,63 @@
 #--unknown-language--@<< imports >>
 #--unknown-language--@+node:peckj.20130206111755.1377:<< imports >>
 import re
+import os.path
+import pickle
 import sys
 import traceback
-#--unknown-language--@nonl
+
+grinder_gold = 0
+grinder_unlocked_libs = []
+grinder_stats_file = '.stats.grinder'
 #--unknown-language--@-node:peckj.20130206111755.1377:<< imports >>
 #--unknown-language--@nl
-
 #--unknown-language--@+others
+#--unknown-language--@+node:peckj.20130206111755.1386:grinder stats
+#--unknown-language--@-node:peckj.20130206111755.1386:grinder stats
 #--unknown-language--@+node:peckj.20130206111755.1379:read_grinder_stats()
 def read_grinder_stats():
-  pass
+  global grinder_gold, grinder_unlocked_libs
+  if os.path.exists(grinder_stats_file):
+    f = open(grinder_stats_file, 'r')
+    c = pickle.load(f)
+    f.close()
+    grinder_gold, grinder_unlocked_libs = c[0], c[1]
 
 #--unknown-language--@-node:peckj.20130206111755.1379:read_grinder_stats()
+#--unknown-language--@+node:peckj.20130206111755.1384:write_grinder_stats()
+def write_grinder_stats():
+  f = open(grinder_stats_file, 'w')
+  pickle.dump((grinder_gold, grinder_unlocked_libs), f)
+  f.close()
+
+
+#--unknown-language--@-node:peckj.20130206111755.1384:write_grinder_stats()
+#--unknown-language--@+node:peckj.20130206111755.1385:print_grinder_stats()
+def print_grinder_stats():
+  print "Your grinder stats:"
+  print "Gold: %d" % grinder_gold
+  print "Unlocked imports:"
+  for lib in grinder_unlocked_libs:
+    print "  %s" % lib
+
+#--unknown-language--@-node:peckj.20130206111755.1385:print_grinder_stats()
 #--unknown-language--@+node:peckj.20130206111755.1380:check_grinder_program()
 def check_grinder_program(prog):
-  pass
+  with open(prog) as f:
+    source_lines = f.readlines()
+    
+    # check imports for any locked libraries
+    # if any found, fill grinder_errors with
+    # appropriate information, return False
+    
+    # else, populate grinder_source with the
+    # proper info, return True
 
 #--unknown-language--@-node:peckj.20130206111755.1380:check_grinder_program()
 #--unknown-language--@+node:peckj.20130206111755.1381:run_grinder_program()
 def run_grinder_program():
-  pass
+  exec(source)
+  grinder_gold += len(source)
 
 #--unknown-language--@-node:peckj.20130206111755.1381:run_grinder_program()
 #--unknown-language--@+node:peckj.20130206111755.1382:print_grinder_errors()
@@ -46,9 +83,15 @@ if __name__ == "__main__":
   arg = sys.argv[1]
   if arg == "shop":
     run_grinder_shop()
+  elif arg == "stats":
+    print_grinder_stats()
+  elif arg == "cheat":
+    grinder_gold += 1000;
+    write_grinder_stats()
   else:
     if check_grinder_program(arg):
       run_grinder_program()
+      write_grinder_stats()
     else:
       print_grinder_errors()
 #--unknown-language--@nonl
