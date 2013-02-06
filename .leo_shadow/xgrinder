@@ -1,0 +1,58 @@
+#--unknown-language--@+leo-ver=4-thin
+#--unknown-language--@+node:peckj.20130206111755.1371:@shadow grinder
+#--unknown-language--@@color
+#--unknown-language--@@language python
+#--unknown-language--@@tabwidth -2
+#!/usr/bin/env python
+
+#--unknown-language--@<< imports >>
+#--unknown-language--@+node:peckj.20130206111755.1377:<< imports >>
+import re
+import sys
+import traceback
+#--unknown-language--@nonl
+#--unknown-language--@-node:peckj.20130206111755.1377:<< imports >>
+#--unknown-language--@nl
+
+#--unknown-language--@+others
+#--unknown-language--@+node:peckj.20130206111755.1379:read_grinder_stats()
+def read_grinder_stats():
+  pass
+
+#--unknown-language--@-node:peckj.20130206111755.1379:read_grinder_stats()
+#--unknown-language--@+node:peckj.20130206111755.1380:check_grinder_program()
+def check_grinder_program(prog):
+  pass
+
+#--unknown-language--@-node:peckj.20130206111755.1380:check_grinder_program()
+#--unknown-language--@+node:peckj.20130206111755.1381:run_grinder_program()
+def run_grinder_program():
+  pass
+
+#--unknown-language--@-node:peckj.20130206111755.1381:run_grinder_program()
+#--unknown-language--@+node:peckj.20130206111755.1382:print_grinder_errors()
+def print_grinder_errors():
+  pass
+
+#--unknown-language--@-node:peckj.20130206111755.1382:print_grinder_errors()
+#--unknown-language--@+node:peckj.20130206111755.1383:run_grinder_shop()
+def run_grinder_shop():
+  pass
+
+#--unknown-language--@-node:peckj.20130206111755.1383:run_grinder_shop()
+#--unknown-language--@+node:peckj.20130206111755.1378:__main__
+if __name__ == "__main__":
+  read_grinder_stats()
+  arg = sys.argv[1]
+  if arg == "shop":
+    run_grinder_shop()
+  else:
+    if check_grinder_program(arg):
+      run_grinder_program()
+    else:
+      print_grinder_errors()
+#--unknown-language--@nonl
+#--unknown-language--@-node:peckj.20130206111755.1378:__main__
+#--unknown-language--@-others
+#--unknown-language--@-node:peckj.20130206111755.1371:@shadow grinder
+#--unknown-language--@-leo

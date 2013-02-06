@@ -1,0 +1,31 @@
+#!/usr/bin/env python
+
+import re
+import sys
+import traceback
+
+def read_grinder_stats():
+  pass
+
+def check_grinder_program(prog):
+  pass
+
+def run_grinder_program():
+  pass
+
+def print_grinder_errors():
+  pass
+
+def run_grinder_shop():
+  pass
+
+if __name__ == "__main__":
+  read_grinder_stats()
+  arg = sys.argv[1]
+  if arg == "shop":
+    run_grinder_shop()
+  else:
+    if check_grinder_program(arg):
+      run_grinder_program()
+    else:
+      print_grinder_errors()
