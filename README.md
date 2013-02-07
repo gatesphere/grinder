@@ -72,7 +72,7 @@ Here's a program with a bunch of failing modules:
     
 Here's a user unlocking the modules needed to run a program (yes, I cheated.):
 
-        $ ./grinder test2.py
+    $ ./grinder test2.py
     Error! Module sys not unlocked!
     
     $ ./grinder shop
