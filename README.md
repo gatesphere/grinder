@@ -120,14 +120,12 @@ when a program throws an exception:
     Unlocked modules:
       sys
     
-    PeckJ@XP-HGJFMS1 ~/repos/grinder
     $ ./grinder test2.py
     cygwin
     Error running program!
     
     list index out of range
     
-    PeckJ@XP-HGJFMS1 ~/repos/grinder
     $ ./grinder stats
     Your grinder stats:
     Gold: 1461
